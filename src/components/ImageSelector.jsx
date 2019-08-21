@@ -6,11 +6,14 @@ import { carouselImages } from './carouselImages.json';
 const ImageSelector = ({ images }) => {
 	return (
 		<div>{images.map(image => (
-			<img
-				src={image.src}
-				key={image.imageName}
-				alt={image.imageCaption}
-			/>
+			<div>
+				<img
+					src={image.src}
+					key={image.imageName}
+					alt={image.imageCaption}
+					/>
+				<p>{image.imageCaption}</p>
+			</div>
 		))}
 		</div>
 	);

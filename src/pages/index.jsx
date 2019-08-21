@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
+import { sortImagesByCaption } from '../utils';
 import { carouselImages } from '../components/carouselImages.json';
 import Layout from '../components/Layout';
 import Carousel from '../components/Carousel';
@@ -31,10 +32,12 @@ const IndexPage = () => {
     };
   });
 
+  const sortedImages = sortImagesByCaption(imagesWithSrc);
+
   return (
     <Layout>
       <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-        <ImageSelector images={imagesWithSrc} />
+        <ImageSelector images={sortedImages} />
         <Carousel />
         <ImageViewer />
       </div>
