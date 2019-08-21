@@ -1,21 +1,45 @@
-import React from "react"
-import { Link } from "gatsby"
+import React from 'react';
+import { useStaticQuery, graphql } from 'gatsby';
+import { carouselImages } from '../components/carouselImages.json';
+import Layout from '../components/Layout';
+import Carousel from '../components/Carousel';
+import ImageSelector from '../components/ImageSelector';
+import ImageViewer from '../components/ImageViewer';
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+const IndexPage = () => {
+  const { allFile: { edges }} = useStaticQuery(graphql`
+    {
+      allFile(filter: { extension: { eq: "jpg" } }) {
+        edges {
+          node {
+            publicURL
+            base
+          }
+        }
+      }
+    }
+  `);
+  const imageNodes = edges.map(({ node }) => node );
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+  const imagesWithSrc = carouselImages.map((image, idx) => {
+    const imageNode = imageNodes.find(node => node.base === image.imageName);
+    const src = imageNode.publicURL;
 
-export default IndexPage
+    return {
+      ...image,
+      src,
+    };
+  });
+
+  return (
+    <Layout>
+      <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
+        <ImageSelector images={imagesWithSrc} />
+        <Carousel />
+        <ImageViewer />
+      </div>
+    </Layout>
+  );
+};
+
+export default IndexPage;
