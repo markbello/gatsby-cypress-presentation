@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import ImageSelector from '../../src/components/ImageSelector';
-import { carouselImages } from '../../src/components/carouselImages.json';
+import { carouselImages } from '../../src/images/carouselImages.json';
 
 const testImages = carouselImages.map(imageData => ({
 	...imageData,

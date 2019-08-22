@@ -1,9 +1,10 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { sortImagesByCaption } from '../utils';
-import { carouselImages } from '../components/carouselImages.json';
+import { carouselImages } from '../images/carouselImages.json';
 import Layout from '../components/Layout';
 import Carousel from '../components/Carousel';
+import CarouselContainer from '../components/CarouselContainer';
 import ImageSelector from '../components/ImageSelector';
 import ImageViewer from '../components/ImageViewer';
 
@@ -36,10 +37,8 @@ const IndexPage = () => {
 
   return (
     <Layout>
-      <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-        <ImageSelector images={sortedImages} />
-        <Carousel />
-        <ImageViewer />
+      <div style={{ marginBottom: `1.45rem` }}>
+        <CarouselContainer images={sortedImages} />
       </div>
     </Layout>
   );

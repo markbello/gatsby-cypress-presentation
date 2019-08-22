@@ -1,25 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStaticQuery, graphql } from 'gatsby';
-import { carouselImages } from './carouselImages.json';
 
 const ImageSelector = ({ images }) => {
 	return (
-		<div>{images.map(image => (
-			<div>
+		<div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>{images.map(image => (
+			<figure style={{ width: '100px', margin: '10px' }}>
 				<img
-					src={image.src}
-					key={image.imageName}
 					alt={image.imageCaption}
-					/>
-				<p>{image.imageCaption}</p>
-			</div>
+					src={image.src}
+					style={{ borderRadius: '15px' }}
+					key={image.imageName}
+					width="100px"
+				/>
+				<figcaption>{image.imageCaption}</figcaption>
+			</figure>
 		))}
 		</div>
 	);
 };
 
-ImageSelector.propTypes = {};
+ImageSelector.propTypes = {
+	images: PropTypes.arrayOf(PropTypes.shape({
+		imageCaption: PropTypes.string.isRequired,
+		imageName: PropTypes.string.isRequired,
+		src: PropTypes.string.isRequired,
+	})),
+};
 
 ImageSelector.displayName = 'ImageSelector';
 
