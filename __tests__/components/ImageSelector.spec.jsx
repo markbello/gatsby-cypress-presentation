@@ -13,7 +13,4 @@ describe('ImageSelector component', () => {
 		const component = shallow(<ImageSelector images={testImages} />);
 		expect(component.find('img').length).toEqual(carouselImages.length);
 	});
-	it('sorts images in alphabetical order by caption', () => {
-
-	});
 });
