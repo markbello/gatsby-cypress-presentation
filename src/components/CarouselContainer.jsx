@@ -1,32 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pull } from 'lodash';
 import ImageSelector from './ImageSelector';
 import ImageViewer from './ImageViewer';
 import Carousel from './Carousel';
 
 export default class CarouselContainer extends Component {
   state = {
-    selectedImages: [],
+    carouselImages: [],
+  }
+
+  addToCarousel = (imageArray) => {
+    const carouselImages = [...this.state.carouselImages, ...imageArray];
+
+    this.setState({ carouselImages });
   };
-
-  selectImage = (image) => {
-    this.setState({
-      selectedImages: [...this.state.selectedImages, image],
-    });
-  }
-
-  deselectImage = (image) => {
-    const selectedImages = pull(this.state.selectedImages, image);
-    this.setState({ selectedImages });
-  }
 
   render() {
     return (
       <div>
-        <ImageSelector images={this.props.images} />
+        <Carousel images={this.state.carouselImages} />
+        <ImageSelector addToCarousel={this.addToCarousel} images={this.props.images} />
         <ImageViewer />
-        <Carousel />
       </div>
     );
   };
