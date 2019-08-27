@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { uniq } from 'lodash';
+import { sortImagesByCaption } from '../utils';
 import ImageSelector from './ImageSelector';
 import ImageViewer from './ImageViewer';
 import Carousel from './Carousel';
@@ -7,10 +9,12 @@ import Carousel from './Carousel';
 export default class CarouselContainer extends Component {
   state = {
     carouselImages: [],
+    rowLimit: 5,
   }
 
   addToCarousel = (imageArray) => {
-    const carouselImages = [...this.state.carouselImages, ...imageArray];
+    const sortedImages = sortImagesByCaption([...this.state.carouselImages, ...imageArray]);
+    const carouselImages = uniq(sortedImages);
 
     this.setState({ carouselImages });
   };
@@ -18,8 +22,15 @@ export default class CarouselContainer extends Component {
   render() {
     return (
       <div>
-        <Carousel images={this.state.carouselImages} />
-        <ImageSelector addToCarousel={this.addToCarousel} images={this.props.images} />
+        <Carousel
+          images={this.state.carouselImages}
+          rowLimit={this.state.rowLimit}
+        />
+        <ImageSelector
+          addToCarousel={this.addToCarousel}
+          allImages={this.props.allImages}
+          carouselImages={this.state.carouselImages}
+        />
         <ImageViewer />
       </div>
     );
@@ -29,7 +40,7 @@ export default class CarouselContainer extends Component {
 CarouselContainer.displayName = 'CarouselContainer';
 
 CarouselContainer.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
+  allImages: PropTypes.arrayOf(PropTypes.shape({
     imageCaption: PropTypes.string.isRequired,
     imageName: PropTypes.string.isRequired,
     src: PropTypes.string.isRequired,

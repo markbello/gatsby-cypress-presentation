@@ -38,7 +38,7 @@ const IndexPage = () => {
   return (
     <Layout>
       <div style={{ marginBottom: `1.45rem` }}>
-        <CarouselContainer images={sortedImages} />
+        <CarouselContainer allImages={sortedImages} />
       </div>
     </Layout>
   );

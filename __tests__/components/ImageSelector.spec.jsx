@@ -11,7 +11,7 @@ const testImages = carouselImages.map(imageData => ({
 
 const props = {
 	addToCarousel: jest.fn(),
-	images: testImages,
+	allImages: testImages,
 	selectedImages: [],
 }
 
@@ -23,7 +23,7 @@ describe('ImageSelector component', () => {
 		expect(component.find(Thumbnail).length).toEqual(carouselImages.length);
 	});
 	it('adds selectedImages to state with selectImage', () => {
-    const component = shallow(<ImageSelector images={testImages} />);
+    const component = shallow(<ImageSelector {...props} />);
     const selectImage = component.instance().selectImage;
 
     selectImage(firstImage);
@@ -37,7 +37,7 @@ describe('ImageSelector component', () => {
     });
   });
   it('removes selectedImages from state with deselectImage', () => {
-    const component = shallow(<ImageSelector images={testImages} />);
+    const component = shallow(<ImageSelector {...props} />);
     const deselectImage = component.instance().deselectImage;
 
     component.setState({ selectedImages: [firstImage] });
@@ -47,8 +47,7 @@ describe('ImageSelector component', () => {
   });
 	it('adds an array of images to the carousel when the "add" button is clicked', () => {
 		const component = shallow(<ImageSelector {...props} />);
-		const instance = component.instance();
-		const selectImage = instance.selectImage;
+		const selectImage = component.instance().selectImage;
 
 		selectImage(firstImage);
 		selectImage(testImages[1]);
@@ -60,5 +59,38 @@ describe('ImageSelector component', () => {
 			firstImage,
 			testImages[1],
 		]);
+	});
+	it('clears selectedImages out of state after adding to carousel', () => {
+		const component = shallow(<ImageSelector {...props} />);
+		const selectImage = component.instance().selectImage;
+
+		selectImage(firstImage);
+		selectImage(testImages[1]);
+
+		expect(component.state()).toEqual({
+			selectedImages: [
+				firstImage,
+				testImages[1],
+			],
+		});
+
+		const addButton = component.find('[data-testid="addButton"]');
+		addButton.simulate('click');
+
+		expect(component.state()).toEqual({
+			selectedImages: [],
+		});
+	});
+	it('filters images out of the ImageSelector options after they are added to Carousel', () => {
+		const component = shallow(<ImageSelector {...props} />);
+		const selectImage = component.instance().selectImage;
+
+		expect(component.find(Thumbnail).length).toEqual(testImages.length);
+
+		component.setProps({
+			carouselImages: [firstImage, testImages[1]],
+		});
+
+		expect(component.find(Thumbnail).length).toEqual(testImages.length - 2);
 	});
 });

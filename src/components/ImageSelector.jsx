@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pull } from 'lodash';
+import { difference, pull } from 'lodash';
 import './imageSelector.css';
 import Thumbnail from './Thumbnail';
 
@@ -25,20 +25,23 @@ class ImageSelector extends Component {
 		const imagesToAdd = this.state.selectedImages;
 
 		addToCarousel(imagesToAdd);
+		this.setState({ selectedImages: [] });
 	}
 
 	render() {
-		const { images } = this.props;
+		const { allImages, carouselImages } = this.props;
 		const { selectedImages } = this.state;
+
+		const availableImages = difference(allImages, carouselImages);
 
 		return (
 			<div>
-				<div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>{images.map(image => {
+				<div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>{availableImages.map(image => {
 						const isSelected = selectedImages.includes(image);
 
 						const clickHandler = () => isSelected
-						? this.deselectImage(image)
-						: this.selectImage(image);
+							? this.deselectImage(image)
+							: this.selectImage(image);
 
 						return (
 							<Thumbnail
@@ -61,6 +64,11 @@ class ImageSelector extends Component {
 
 ImageSelector.propTypes = {
 	addToCarousel: PropTypes.func.isRequired,
+	carouselImages: PropTypes.arrayOf(PropTypes.shape({
+		imageCaption: PropTypes.string.isRequired,
+		imageName: PropTypes.string.isRequired,
+		src: PropTypes.string.isRequired,
+	})),
 	images: PropTypes.arrayOf(PropTypes.shape({
 		imageCaption: PropTypes.string.isRequired,
 		imageName: PropTypes.string.isRequired,
