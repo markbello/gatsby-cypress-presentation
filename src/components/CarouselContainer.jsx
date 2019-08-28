@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { uniq } from 'lodash';
+import { difference, uniq } from 'lodash';
 import { sortImagesByCaption } from '../utils';
 import ImageSelector from './ImageSelector';
 import ImageViewer from './ImageViewer';
@@ -19,11 +19,17 @@ export default class CarouselContainer extends Component {
     this.setState({ carouselImages });
   };
 
+  removeFromCarousel = (imageArray) => {
+    const carouselImages = difference(this.state.carouselImages, imageArray);
+    this.setState({ carouselImages });
+  };
+
   render() {
     return (
       <div>
         <Carousel
           images={this.state.carouselImages}
+          removeFromCarousel={this.removeFromCarousel}
           rowLimit={this.state.rowLimit}
         />
         <ImageSelector

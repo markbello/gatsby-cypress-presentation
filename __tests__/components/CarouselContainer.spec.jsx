@@ -22,4 +22,15 @@ describe('CarouselContainer', () => {
 
 		expect(component.state().carouselImages.length).toEqual(3);
   });
+  it('removeFromCarousel removes images from state', () => {
+		const component = shallow(<CarouselContainer images={testImages} />);
+		component.setState({ carouselImages: [firstImage, testImages[1]] });
+
+		expect(component.state().carouselImages.length).toEqual(2);
+
+		const removeFromCarousel = component.instance().removeFromCarousel;
+		removeFromCarousel([testImages[1]]);
+
+		expect(component.state().carouselImages.length).toEqual(1);
+  });
 });

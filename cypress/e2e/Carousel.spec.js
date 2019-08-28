@@ -92,4 +92,71 @@ describe('Carousel', () => {
       .get('[data-testid=carousel-image]')
       .should('have.length', 3);
   });
+  it('toggles into edit mode when the view-mode button is clicked', () => {
+    cy.get('[data-testid=button-view-mode]')
+      .click()
+      .get('[data-testid=button-view-mode]')
+      .should('have.text', 'Return to View Mode');
+  });
+  it('toggles back to view mode when the view-mode button is clicked a second time', () => {
+    cy.get('[data-testid=button-view-mode]')
+      .click()
+      .get('[data-testid=button-view-mode]')
+      .click()
+      .should('have.text', 'Enter Edit Mode');
+  });
+  it('applies "selected" class when user clicks an image in Edit Mode', () => {
+    cy.get('[data-testid=button-view-mode]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .first()
+      .click()
+      .should('have.class', 'selected');
+  });
+  it('removes "selected" class when user clicks an image in Edit Mode a second time', () => {
+    cy.get('[data-testid=button-view-mode]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .first()
+      .click()
+      .should('have.class', 'selected')
+      .click()
+      .should('not.have.class', 'selected');
+  });
+  it('removes a selected image in Edit Mode when the Remove button is clicked', () => {
+    cy.get('[data-testid=thumbnail]')
+      .last()
+      .click()
+      .get('[data-testid=addButton]')
+      .click()
+      .get('[data-testid=button-view-mode]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .first()
+      .click()
+      .get('[data-testid=button-remove]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .should('have.length', 1);
+  });
+  it('repopulates a removed carousel image back into the ImageSelector', () => {
+    cy.get('[data-testid=thumbnail]')
+      .last()
+      .click()
+      .get('[data-testid=addButton]')
+      .click()
+      .get('[data-testid=thumbnail]')
+      .should('have.length', carouselImages.length - 2)
+      .get('[data-testid=button-view-mode]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .first()
+      .click()
+      .get('[data-testid=button-remove]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .should('have.length', 1)
+      .get('[data-testid=thumbnail]')
+      .should('have.length', carouselImages.length - 1);
+  });
 });

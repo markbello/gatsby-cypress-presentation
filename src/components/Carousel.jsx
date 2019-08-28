@@ -1,21 +1,42 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { pull } from 'lodash';
+import CarouselImage from './CarouselImage';
 
 class Carousel extends Component {
   state = {
+    isEditMode: false,
     rowLimit: 2,
+    selectedImages: [],
     startIndex: 0,
   };
 
+  selectImage = (image) => {
+    this.setState({
+      selectedImages: [...this.state.selectedImages, image],
+    });
+  }
+
+  deselectImage = (image) => {
+    const selectedImages = pull(this.state.selectedImages, image);
+    this.setState({ selectedImages });
+  }
+
+  removeButtonHandler = () => {
+    const { removeFromCarousel } = this.props;
+    const imagesToRemove = this.state.selectedImages;
+
+    removeFromCarousel(imagesToRemove);
+    this.setState({ selectedImages: [] });
+  }
+
   nextButtonHandler = () => {
     const { rowLimit, startIndex } = this.state;
-
     this.setState({ startIndex: startIndex + rowLimit });
   }
 
   previousButtonHandler = () => {
     const { rowLimit, startIndex } = this.state;
-
     this.setState({ startIndex: startIndex - rowLimit });
   }
 
@@ -23,24 +44,43 @@ class Carousel extends Component {
     this.setState({ rowLimit });
   };
 
+  toggleEditMode = () => {
+    const isEditMode = !this.state.isEditMode;
+    this.setState({ isEditMode });
+  }
+
   render() {
-    const { images } = this.props;
-    const { rowLimit, startIndex } = this.state;
+    const { images, removeFromCarousel } = this.props;
+    const {
+      isEditMode,
+      rowLimit,
+      selectedImages,
+      startIndex,
+    } = this.state;
 
     const imagesToShow = images.slice(startIndex, (startIndex + rowLimit));
+
     const shouldDisableNextButton = (startIndex + rowLimit) >= images.length;
+    const shouldDisableRemoveButton = !isEditMode
+      || !selectedImages.length;
+
+    const viewModeButtonLabel = isEditMode
+      ? 'Return to View Mode'
+      : 'Enter Edit Mode';
 
     return (
       <div data-testid="carousel">
         <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%'}}>
           {imagesToShow.map(image => (
-            <div
-              data-testid="carousel-image"
+            <CarouselImage
+              deselectImage={this.deselectImage}
+              image={image}
+              isEditMode={isEditMode}
+              isSelected={selectedImages.includes(image)}
               key={image.imageName}
-              style={{ width: `calc(${100 / rowLimit}% - 10px)`, margin: '5px' }}
-            >
-              <img src={image.src} alt={image.imageCaption} style={{ borderRadius: '15px' }}/>
-            </div>
+              rowLimit={rowLimit}
+              selectImage={this.selectImage}
+            />
           ))}
         </div>
         {!!images.length && (
@@ -72,6 +112,23 @@ class Carousel extends Component {
                 <option value="5">5</option>
               </select>
             </div>
+            <div>
+              <button
+                data-testid="button-view-mode"
+                onClick={this.toggleEditMode}
+              >
+                {viewModeButtonLabel}
+              </button>
+            </div>
+            <div>
+              <button
+                data-testid="button-remove"
+                disabled={shouldDisableRemoveButton}
+                onClick={this.removeButtonHandler}
+              >
+                Remove from Carousel
+              </button>
+            </div>
           </div>
       )}
     </div>
@@ -80,11 +137,12 @@ class Carousel extends Component {
 };
 
 Carousel.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
+  images: PropTypes.shape({
     imageCaption: PropTypes.string.isRequired,
     imageName: PropTypes.string.isRequired,
     src: PropTypes.string.isRequired,
-  })),
+  }),
+  removeFromCarousel: PropTypes.func.isRequired,
 };
 
 Carousel.displayName = 'Carousel';
