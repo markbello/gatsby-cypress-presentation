@@ -32,16 +32,20 @@ class Carousel extends Component {
   }
 
   nextButtonHandler = () => {
-    const { rowLimit, startIndex } = this.state;
-    this.setState({ startIndex: startIndex + rowLimit });
+    const startIndex = this.calculateNextStartIndex();
+    this.setState({ startIndex });
   }
 
   previousButtonHandler = () => {
     const { rowLimit, startIndex } = this.state;
-    this.setState({ startIndex: startIndex - rowLimit });
+    const basicPreviousStartIndex = startIndex - rowLimit;
+
+    const sanitizedPreviousStartIndex = Math.max(basicPreviousStartIndex, 0);
+    this.setState({ startIndex: sanitizedPreviousStartIndex });
   }
 
-  setRowLimit = ({ target: { value: rowLimit } }) => {
+  setRowLimit = ({ target: { value } }) => {
+    const rowLimit = parseInt(value);
     this.setState({ rowLimit });
   };
 
@@ -51,6 +55,22 @@ class Carousel extends Component {
 
     deactivateImage();
     this.setState({ isEditMode, selectedImages: [] });
+  }
+
+  calculateNextStartIndex = () => {
+    const { rowLimit, startIndex } = this.state;
+    const { images } = this.props;
+
+    const ordinaryNextIndex = rowLimit + startIndex;
+    const isFinalRow = (ordinaryNextIndex + rowLimit) > images.length;
+    const emptySlotCount = images.length - ordinaryNextIndex;
+
+    const shouldShiftIndex = isFinalRow
+      && emptySlotCount > 0;
+
+    return shouldShiftIndex
+      ? ordinaryNextIndex - emptySlotCount
+      : ordinaryNextIndex;
   }
 
   render() {

@@ -23,11 +23,28 @@ describe('Carousel component', () => {
   it('decrements the start index by rowLimit on "previous" button click', () => {
     const component = shallow(<Carousel {...props} />);
     const previousButton = component.find('[data-testid="button-previous"]');
-    const { rowLimit, startIndex } = component.state();
+
+    component.setState({
+      rowLimit: 2,
+      startIndex: 4,
+    });
 
     previousButton.simulate('click');
 
-    expect(component.state().startIndex).toEqual(startIndex - rowLimit);
+    expect(component.state().startIndex).toEqual(2);
+  });
+  it('decrements the start index down to a minimum of 0', () => {
+    const component = shallow(<Carousel {...props} />);
+    const previousButton = component.find('[data-testid="button-previous"]');
+
+    component.setState({
+      rowLimit: 5,
+      startIndex: 2,
+    });
+
+    previousButton.simulate('click');
+
+    expect(component.state().startIndex).toEqual(0);
   });
   it('increments the start index by rowLimit on "next" button click', () => {
     const component = shallow(<Carousel {...props} />);
@@ -127,5 +144,37 @@ describe('Carousel component', () => {
     toggleEditMode();
 
     expect(props.deactivateImage).toHaveBeenCalled();
+  });
+  it('calculateNextStartIndex paginates forward by rowLimit positions', () => {
+    const fiveImageProps = {
+      ...props,
+      images: testImages.slice(0,5),
+    }
+    const component = shallow(<Carousel {...fiveImageProps } />);
+
+    component.setState({
+      rowLimit: 2,
+      startIndex: 0,
+    });
+
+    const { calculateNextStartIndex } = component.instance();
+
+    expect(calculateNextStartIndex(fiveImageProps.images)).toEqual(2);
+  });
+  it('calculateNextStartIndex shifts to include previous images to fill empty row slots', () => {
+    const fiveImageProps = {
+      ...props,
+      images: testImages.slice(0,5),
+    }
+    const component = shallow(<Carousel {...fiveImageProps} />);
+
+    component.setState({
+      rowLimit: 3,
+      startIndex: 0,
+    });
+
+    const { calculateNextStartIndex } = component.instance();
+
+    expect(calculateNextStartIndex(fiveImageProps.images)).toEqual(1);
   });
 });

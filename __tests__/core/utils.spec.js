@@ -1,7 +1,7 @@
 import {
   sanitizeCaption,
   sortImagesByCaption,
-} from '../../src/utils';
+} from '../../src/core/utils';
 
 describe('utils', () => {
   it('sortImagesByCaption sorts images by imageCaption', () => {

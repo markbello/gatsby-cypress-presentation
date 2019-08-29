@@ -59,6 +59,21 @@ describe('Carousel', () => {
       .get('[data-testid=button-next]')
       .should('be.disabled');
   });
+  it('shows the full rowLimit of images on the last row by carrying over images from the left', () => {
+    cy.get('[data-testid=thumbnail]')
+      .first()
+      .click()
+      .next()
+      .click()
+      .get('[data-testid=addButton]')
+      .click()
+      .get('[data-testid=button-next]')
+      .click()
+      .get('[data-testid=button-next]')
+      .should('be.disabled')
+      .get('[data-testid=carousel-image]')
+      .should('have.length', 2);
+  });
   it('disables the "previous" button when going back to the first row of images', () => {
     cy.get('[data-testid=thumbnail]')
       .first()
