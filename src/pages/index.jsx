@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
-import { sortImagesByCaption } from '../utils';
+import { sortImagesByCaption } from '../core/utils';
 import { carouselImages } from '../images/carouselImages.json';
 import Layout from '../components/Layout';
 import Carousel from '../components/Carousel';

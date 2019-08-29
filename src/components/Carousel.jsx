@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pull } from 'lodash';
+import lang from '../core/langPack.json';
 import CarouselImage from './CarouselImage';
 
 class Carousel extends Component {
@@ -45,18 +46,34 @@ class Carousel extends Component {
   };
 
   toggleEditMode = () => {
+    const { deactivateImage } = this.props;
     const isEditMode = !this.state.isEditMode;
-    this.setState({ isEditMode });
+
+    deactivateImage();
+    this.setState({ isEditMode, selectedImages: [] });
   }
 
   render() {
-    const { images, removeFromCarousel } = this.props;
+    const {
+      activateImage,
+      deactivateImage,
+      images,
+      removeFromCarousel,
+    } = this.props;
     const {
       isEditMode,
       rowLimit,
       selectedImages,
       startIndex,
     } = this.state;
+    const {
+      viewModeLabel,
+      editModeLabel,
+      removeButtonLabel,
+      previousButtonLabel,
+      nextButtonLabel,
+      rowLimitLabel,
+    } = lang;
 
     const imagesToShow = images.slice(startIndex, (startIndex + rowLimit));
 
@@ -65,14 +82,15 @@ class Carousel extends Component {
       || !selectedImages.length;
 
     const viewModeButtonLabel = isEditMode
-      ? 'Return to View Mode'
-      : 'Enter Edit Mode';
+      ? viewModeLabel
+      : editModeLabel;
 
     return (
       <div data-testid="carousel">
         <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%'}}>
           {imagesToShow.map(image => (
             <CarouselImage
+              activateImage={activateImage}
               deselectImage={this.deselectImage}
               image={image}
               isEditMode={isEditMode}
@@ -90,17 +108,17 @@ class Carousel extends Component {
               disabled={startIndex === 0}
               onClick={this.previousButtonHandler}
               >
-              previous
+              {previousButtonLabel}
             </button>
             <button
               data-testid="button-next"
               disabled={shouldDisableNextButton}
               onClick={this.nextButtonHandler}
               >
-              next
+              {nextButtonLabel}
             </button>
             <div>
-              <label htmlFor="row-limit">Row Limit</label>
+              <label htmlFor="row-limit">{rowLimitLabel}</label>
               <select
                 data-testid="dropdown-rowlimit"
                 name="row-limit"
@@ -126,7 +144,7 @@ class Carousel extends Component {
                 disabled={shouldDisableRemoveButton}
                 onClick={this.removeButtonHandler}
               >
-                Remove from Carousel
+                {removeButtonLabel}
               </button>
             </div>
           </div>
@@ -137,12 +155,15 @@ class Carousel extends Component {
 };
 
 Carousel.propTypes = {
-  images: PropTypes.shape({
+  activateImage: PropTypes.func.isRequired,
+  deactivateImage: PropTypes.func.isRequired,
+  images: PropTypes.arrayOf(PropTypes.shape({
     imageCaption: PropTypes.string.isRequired,
     imageName: PropTypes.string.isRequired,
     src: PropTypes.string.isRequired,
-  }),
+  })),
   removeFromCarousel: PropTypes.func.isRequired,
+  rowLimit: PropTypes.number.isRequired,
 };
 
 Carousel.displayName = 'Carousel';

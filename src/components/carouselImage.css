@@ -10,10 +10,6 @@
   width: 100%;
 }
 
-.imageCaption:hover {
-  color: red;
-}
-
 .selected img {
-  border: 3px solid #00c0ff;
+  border: 3px solid #fd4926;
 }

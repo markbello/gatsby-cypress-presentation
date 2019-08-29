@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { difference, uniq } from 'lodash';
-import { sortImagesByCaption } from '../utils';
+import { sortImagesByCaption } from '../core/utils';
 import ImageSelector from './ImageSelector';
 import ImageViewer from './ImageViewer';
 import Carousel from './Carousel';
 
 export default class CarouselContainer extends Component {
   state = {
+    activeImage: null,
     carouselImages: [],
     rowLimit: 5,
   }
@@ -24,20 +25,26 @@ export default class CarouselContainer extends Component {
     this.setState({ carouselImages });
   };
 
+  activateImage = (image) => this.setState({ activeImage: image });
+
+  deactivateImage = () => this.setState({ activeImage: null });
+
   render() {
     return (
       <div>
         <Carousel
+          activateImage={this.activateImage}
+          deactivateImage={this.deactivateImage}
           images={this.state.carouselImages}
           removeFromCarousel={this.removeFromCarousel}
           rowLimit={this.state.rowLimit}
         />
+        <ImageViewer image={this.state.activeImage} />
         <ImageSelector
           addToCarousel={this.addToCarousel}
           allImages={this.props.allImages}
           carouselImages={this.state.carouselImages}
         />
-        <ImageViewer />
       </div>
     );
   };

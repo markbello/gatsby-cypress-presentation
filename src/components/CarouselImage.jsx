@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './carouselImage.css';
 
 const CarouselImage = ({
+  activateImage,
   deselectImage,
   image,
   isEditMode,
@@ -23,6 +24,8 @@ const CarouselImage = ({
         ? deselectImage(image)
         : selectImage(image);
     }
+
+    return activateImage(image);
   };
 
   return (
@@ -45,11 +48,11 @@ const CarouselImage = ({
 };
 
 CarouselImage.propTypes = {
-  image: PropTypes.arrayOf(PropTypes.shape({
+  image: PropTypes.shape({
     imageCaption: PropTypes.string.isRequired,
     imageName: PropTypes.string.isRequired,
     src: PropTypes.string.isRequired,
-  })),
+  }),
   isEditMode: PropTypes.bool.isRequired,
   isSelected: PropTypes.bool.isRequired,
   rowLimit: PropTypes.number.isRequired,

@@ -1,0 +1,9 @@
+{
+  "viewModeLabel": "Return to View Mode",
+  "editModeLabel": "Enter Edit Mode",
+  "addButtonLabel": "Add to Carousel",
+  "removeButtonLabel": "Remove from Carousel",
+  "previousButtonLabel": "Previous",
+  "nextButtonLabel": "Next",
+  "rowLimitLabel": "Row Limit"
+}

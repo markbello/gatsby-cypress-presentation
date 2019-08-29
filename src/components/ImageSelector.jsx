@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { difference, pull } from 'lodash';
 import './imageSelector.css';
+import lang from '../core/langPack.json';
 import Thumbnail from './Thumbnail';
 
 class ImageSelector extends Component {
@@ -55,7 +56,13 @@ class ImageSelector extends Component {
 					})}
 				</div>
 				<div>
-					<button data-testid="addButton" disabled={selectedImages.length === 0} onClick={this.addButtonHandler}>Add</button>
+					<button
+						data-testid="addButton"
+						disabled={selectedImages.length === 0}
+						onClick={this.addButtonHandler}
+					>
+						{lang.addButtonLabel}
+					</button>
 				</div>
 			</div>
 		);

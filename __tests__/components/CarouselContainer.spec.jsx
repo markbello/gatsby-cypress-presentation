@@ -1,13 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import CarouselContainer from '../../src/components/CarouselContainer';
-import { carouselImages } from '../../src/images/carouselImages.json';
-
-const testImages = carouselImages.map((imageData) => ({
-  ...imageData,
-  src: 'http://www.testurl.com',
-}));
-const firstImage = testImages[0];
+import { testImages, firstImage } from '../__fixtures__/';
 
 describe('CarouselContainer', () => {
   it('addToCarousel adds images to state', () => {
@@ -32,5 +26,24 @@ describe('CarouselContainer', () => {
 		removeFromCarousel([testImages[1]]);
 
 		expect(component.state().carouselImages.length).toEqual(1);
+  });
+  it('activateImage sets activeImage on the state', () => {
+    const component = shallow(<CarouselContainer images={testImages} />);
+    const { activateImage } = component.instance();
+
+    expect(component.state().activeImage).toBe(null);
+
+    activateImage(firstImage);
+
+    expect(component.state().activeImage).toEqual(firstImage);
+  });
+  it('deactivateImage unsets activeImage on the state', () => {
+    const component = shallow(<CarouselContainer images={testImages} />);
+    const { deactivateImage } = component.instance();
+
+    component.setState({ activeImage: firstImage });
+    deactivateImage();
+
+    expect(component.state().activeImage).toBe(null);
   });
 });

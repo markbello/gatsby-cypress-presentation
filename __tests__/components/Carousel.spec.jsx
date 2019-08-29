@@ -2,21 +2,17 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Carousel from '../../src/components/Carousel';
 import CarouselImage from '../../src/components/CarouselImage';
-import { carouselImages } from '../../src/images/carouselImages.json';
-
-const testImages = carouselImages.map(imageData => ({
-	...imageData,
-	src: 'http://www.testurl.com',
-}));
+import { testImages, firstImage } from '../__fixtures__/';
 
 const removeFromCarousel = jest.fn();
 
 const props = {
+  activateImage: jest.fn(),
+  deactivateImage: jest.fn(),
   images: testImages,
   removeFromCarousel,
+  rowLimit: 2,
 };
-
-const firstImage = testImages[0];
 
 describe('Carousel component', () => {
   it('only shows one row of images at a time', () => {
@@ -62,7 +58,7 @@ describe('Carousel component', () => {
   });
   it('adds selectedImages to state with selectImage', () => {
     const component = shallow(<Carousel {...props} />);
-    const selectImage = component.instance().selectImage;
+    const { selectImage } = component.instance();
 
     selectImage(firstImage);
 
@@ -76,7 +72,7 @@ describe('Carousel component', () => {
   });
   it('removes selectedImages from state with deselectImage', () => {
     const component = shallow(<Carousel {...props} />);
-    const deselectImage = component.instance().deselectImage;
+    const { deselectImage } = component.instance();
 
     component.setState({ selectedImages: [firstImage] });
     deselectImage(firstImage);
@@ -85,7 +81,7 @@ describe('Carousel component', () => {
   });
   it('removes an array of images from the carousel when the "remove" button is clicked', () => {
     const component = shallow(<Carousel {...props} />);
-    const selectImage = component.instance().selectImage;
+    const { selectImage } = component.instance();
 
     selectImage(firstImage);
     selectImage(testImages[1]);
@@ -100,7 +96,7 @@ describe('Carousel component', () => {
   });
   it('clears selectedImages out of state after removing from carousel', () => {
     const component = shallow(<Carousel {...props} />);
-    const selectImage = component.instance().selectImage;
+    const { selectImage } = component.instance();
 
     selectImage(firstImage);
     selectImage(testImages[1]);
@@ -114,5 +110,22 @@ describe('Carousel component', () => {
     removeButton.simulate('click');
 
     expect(component.state().selectedImages).toEqual([]);
+  });
+  it('clears selectedImages out of state when switching back to View Mode', () => {
+    const component = shallow(<Carousel {...props} />);
+    const { toggleEditMode } = component.instance();
+
+    component.setState({ selectedImages: [firstImage] });
+    toggleEditMode();
+
+    expect(component.state().selectedImages).toEqual([]);
+  });
+  it('deactivates the ImageViewer image when switching into Edit Mode', () => {
+    const component = shallow(<Carousel {...props} />);
+    const { toggleEditMode } = component.instance();
+
+    toggleEditMode();
+
+    expect(props.deactivateImage).toHaveBeenCalled();
   });
 });

@@ -2,12 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import ImageSelector from '../../src/components/ImageSelector';
 import Thumbnail from '../../src/components/Thumbnail';
-import { carouselImages } from '../../src/images/carouselImages.json';
-
-const testImages = carouselImages.map(imageData => ({
-	...imageData,
-	src: 'http://www.testurl.com',
-}));
+import { testImages, firstImage } from '../__fixtures__/'
 
 const props = {
 	addToCarousel: jest.fn(),
@@ -15,12 +10,10 @@ const props = {
 	selectedImages: [],
 }
 
-const firstImage = testImages[0];
-
 describe('ImageSelector component', () => {
 	it('returns an <img /> for every item in the carousel', () => {
 		const component = shallow(<ImageSelector {...props} />);
-		expect(component.find(Thumbnail).length).toEqual(carouselImages.length);
+		expect(component.find(Thumbnail).length).toEqual(testImages.length);
 	});
 	it('adds selectedImages to state with selectImage', () => {
     const component = shallow(<ImageSelector {...props} />);

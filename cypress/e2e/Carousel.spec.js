@@ -1,4 +1,5 @@
 import { carouselImages } from '../../src/images/carouselImages.json';
+import lang from '../../src/core/langPack.json';
 
 describe('Carousel', () => {
   beforeEach(() => {
@@ -96,14 +97,14 @@ describe('Carousel', () => {
     cy.get('[data-testid=button-view-mode]')
       .click()
       .get('[data-testid=button-view-mode]')
-      .should('have.text', 'Return to View Mode');
+      .should('have.text', lang.viewModeLabel);
   });
   it('toggles back to view mode when the view-mode button is clicked a second time', () => {
     cy.get('[data-testid=button-view-mode]')
       .click()
       .get('[data-testid=button-view-mode]')
       .click()
-      .should('have.text', 'Enter Edit Mode');
+      .should('have.text', lang.editModeLabel);
   });
   it('applies "selected" class when user clicks an image in Edit Mode', () => {
     cy.get('[data-testid=button-view-mode]')
@@ -121,6 +122,19 @@ describe('Carousel', () => {
       .click()
       .should('have.class', 'selected')
       .click()
+      .should('not.have.class', 'selected');
+  });
+  it('removes "selected" class when user toggles back into View Mode', () => {
+    cy.get('[data-testid=button-view-mode]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .first()
+      .click()
+      .should('have.class', 'selected')
+      .get('[data-testid=button-view-mode]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .first()
       .should('not.have.class', 'selected');
   });
   it('removes a selected image in Edit Mode when the Remove button is clicked', () => {
