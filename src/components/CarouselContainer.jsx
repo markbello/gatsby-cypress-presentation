@@ -39,7 +39,7 @@ export default class CarouselContainer extends Component {
           removeFromCarousel={this.removeFromCarousel}
           rowLimit={this.state.rowLimit}
         />
-        <ImageViewer image={this.state.activeImage} />
+      {this.state.activeImage && <ImageViewer image={this.state.activeImage} />}
         <ImageSelector
           addToCarousel={this.addToCarousel}
           allImages={this.props.allImages}

@@ -107,14 +107,14 @@ class Carousel extends Component {
               data-testid="button-previous"
               disabled={startIndex === 0}
               onClick={this.previousButtonHandler}
-              >
+            >
               {previousButtonLabel}
             </button>
             <button
               data-testid="button-next"
               disabled={shouldDisableNextButton}
               onClick={this.nextButtonHandler}
-              >
+            >
               {nextButtonLabel}
             </button>
             <div>
