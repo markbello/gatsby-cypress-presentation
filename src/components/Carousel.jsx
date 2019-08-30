@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { constant, pull, times } from 'lodash';
-import { CSSTransitionGroup } from 'react-transition-group';
 import lang from '../core/langPack.json';
 import './carousel.css';
 import CarouselImage from './CarouselImage';
@@ -14,62 +13,6 @@ class Carousel extends Component {
     selectedImages: [],
     startIndex: 0,
   };
-
-  selectImage = (image) => {
-    this.setState({
-      selectedImages: [...this.state.selectedImages, image],
-    });
-  }
-
-  deselectImage = (image) => {
-    const selectedImages = pull(this.state.selectedImages, image);
-    this.setState({ selectedImages });
-  }
-
-  removeButtonHandler = () => {
-    const { removeFromCarousel } = this.props;
-    const imagesToRemove = this.state.selectedImages;
-
-    removeFromCarousel(imagesToRemove);
-    this.setState({ selectedImages: [] });
-  }
-
-  nextButtonHandler = () => {
-    const { imageSetIndex } = this.state;
-    const newImageSetIndex = imageSetIndex + 1;
-
-    const startIndex = this.calculateNextStartIndex();
-    this.setState({
-      imageSetIndex: newImageSetIndex,
-      startIndex,
-    });
-  }
-
-  previousButtonHandler = () => {
-    const { imageSetIndex, rowLimit, startIndex } = this.state;
-    const newImageSetIndex = imageSetIndex - 1;
-
-    const basicPreviousStartIndex = startIndex - rowLimit;
-    const sanitizedPreviousStartIndex = Math.max(basicPreviousStartIndex, 0);
-
-    this.setState({
-      imageSetIndex: newImageSetIndex,
-      startIndex: sanitizedPreviousStartIndex,
-    });
-  }
-
-  setRowLimit = ({ target: { value } }) => {
-    const rowLimit = parseInt(value);
-    this.setState({ rowLimit, startIndex: 0 });
-  };
-
-  toggleEditMode = () => {
-    const { deactivateImage } = this.props;
-    const isEditMode = !this.state.isEditMode;
-
-    deactivateImage();
-    this.setState({ isEditMode, selectedImages: [] });
-  }
 
   calculateNextStartIndex = () => {
     const { rowLimit, startIndex } = this.state;
@@ -95,6 +38,62 @@ class Carousel extends Component {
       : fullRowCount;
   }
 
+  deselectImage = (image) => {
+    const selectedImages = pull(this.state.selectedImages, image);
+    this.setState({ selectedImages });
+  }
+
+  nextButtonHandler = () => {
+    const { imageSetIndex } = this.state;
+    const newImageSetIndex = imageSetIndex + 1;
+
+    const startIndex = this.calculateNextStartIndex();
+    this.setState({
+      imageSetIndex: newImageSetIndex,
+      startIndex,
+    });
+  }
+
+  previousButtonHandler = () => {
+    const { imageSetIndex, rowLimit, startIndex } = this.state;
+    const newImageSetIndex = imageSetIndex - 1;
+
+    const basicPreviousStartIndex = startIndex - rowLimit;
+    const sanitizedPreviousStartIndex = Math.max(basicPreviousStartIndex, 0); // prevents setting negative index
+
+    this.setState({
+      imageSetIndex: newImageSetIndex,
+      startIndex: sanitizedPreviousStartIndex,
+    });
+  }
+
+  removeButtonHandler = () => {
+    const { removeFromCarousel } = this.props;
+    const imagesToRemove = this.state.selectedImages;
+
+    removeFromCarousel(imagesToRemove);
+    this.setState({ selectedImages: [] });
+  }
+
+  selectImage = (image) => {
+    this.setState({
+      selectedImages: [...this.state.selectedImages, image],
+    });
+  }
+
+  setRowLimit = ({ target: { value } }) => {
+    const rowLimit = parseInt(value);
+    this.setState({ rowLimit, startIndex: 0 });
+  };
+
+  toggleEditMode = () => {
+    const { deactivateImage } = this.props;
+    const isEditMode = !this.state.isEditMode;
+
+    deactivateImage();
+    this.setState({ isEditMode, selectedImages: [] });
+  }
+
   render() {
     const {
       activateImage,
@@ -110,12 +109,12 @@ class Carousel extends Component {
       startIndex,
     } = this.state;
     const {
-      viewModeLabel,
       editModeLabel,
-      removeButtonLabel,
-      previousButtonLabel,
       nextButtonLabel,
+      previousButtonLabel,
+      removeButtonLabel,
       rowLimitLabel,
+      viewModeLabel,
     } = lang;
 
     const imagesToShow = images.slice(startIndex, (startIndex + rowLimit));
@@ -132,7 +131,7 @@ class Carousel extends Component {
 
     return (
       <div data-testid="carousel">
-        <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%'}}>
+        <div className="carouselImageContainer">
           {imagesToShow.map(image => (
             <CarouselImage
               activateImage={activateImage}
@@ -146,7 +145,7 @@ class Carousel extends Component {
               />
           ))}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'center' }} >
+        <div className="dotContainer" >
           <div>
             {dots.map((dot, index) => (
               <span
@@ -219,7 +218,6 @@ Carousel.propTypes = {
     src: PropTypes.string.isRequired,
   })),
   removeFromCarousel: PropTypes.func.isRequired,
-  rowLimit: PropTypes.number.isRequired,
 };
 
 Carousel.displayName = 'Carousel';

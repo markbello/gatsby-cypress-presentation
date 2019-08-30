@@ -37,7 +37,7 @@ class ImageSelector extends Component {
 
 		return (
 			<div>
-				<div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>{availableImages.map(image => {
+				<div className="thumbnailContainer">{availableImages.map(image => {
 						const isSelected = selectedImages.includes(image);
 
 						const clickHandler = () => isSelected

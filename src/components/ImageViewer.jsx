@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './imageViewer.css';
 
-const ImageViewer = ({ image }) => (
+const ImageViewer = ({ image: { imageCaption, src } }) => (
   <div data-testid="image-viewer">
     <img
+      className="imageViewerImage"
       data-testid="image-viewer-img"
-      src={image.src}
-      style={{ width: '500px', borderRadius: '15px' }}
+      src={src}
     />
-    <div data-testid="image-viewer-caption">{image.imageCaption}</div>
+    <div data-testid="image-viewer-caption">{imageCaption}</div>
   </div>
 );
 

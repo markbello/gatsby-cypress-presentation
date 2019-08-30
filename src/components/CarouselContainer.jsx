@@ -6,11 +6,10 @@ import ImageSelector from './ImageSelector';
 import ImageViewer from './ImageViewer';
 import Carousel from './Carousel';
 
-export default class CarouselContainer extends Component {
+class CarouselContainer extends Component {
   state = {
     activeImage: null,
     carouselImages: [],
-    rowLimit: 5,
   }
 
   addToCarousel = (imageArray) => {
@@ -19,32 +18,32 @@ export default class CarouselContainer extends Component {
 
     this.setState({ carouselImages });
   };
-
   removeFromCarousel = (imageArray) => {
     const carouselImages = difference(this.state.carouselImages, imageArray);
     this.setState({ carouselImages });
   };
 
   activateImage = (image) => this.setState({ activeImage: image });
-
   deactivateImage = () => this.setState({ activeImage: null });
 
   render() {
+    const { allImages } = this.props;
+    const { activeImage, carouselImages, rowLimit } = this.state;
+
     return (
       <div>
         <ImageSelector
           addToCarousel={this.addToCarousel}
-          allImages={this.props.allImages}
-          carouselImages={this.state.carouselImages}
+          allImages={allImages}
+          carouselImages={carouselImages}
         />
         <Carousel
           activateImage={this.activateImage}
           deactivateImage={this.deactivateImage}
-          images={this.state.carouselImages}
+          images={carouselImages}
           removeFromCarousel={this.removeFromCarousel}
-          rowLimit={this.state.rowLimit}
         />
-      {this.state.activeImage && <ImageViewer image={this.state.activeImage} />}
+        {activeImage && <ImageViewer image={activeImage} />}
       </div>
     );
   };
@@ -59,3 +58,5 @@ CarouselContainer.propTypes = {
     src: PropTypes.string.isRequired,
   })),
 };
+
+export default CarouselContainer;

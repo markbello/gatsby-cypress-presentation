@@ -1,3 +1,16 @@
+.carouselImageContainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.dotContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+}
+
 .selectedNavDot {
   color: #00c0ff;
 }
