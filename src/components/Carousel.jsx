@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { pull } from 'lodash';
+import { constant, pull, times } from 'lodash';
 import lang from '../core/langPack.json';
+import './carousel.css';
 import CarouselImage from './CarouselImage';
 
 class Carousel extends Component {
   state = {
+    imageSetIndex: 0,
     isEditMode: false,
     rowLimit: 2,
     selectedImages: [],
@@ -32,21 +34,32 @@ class Carousel extends Component {
   }
 
   nextButtonHandler = () => {
+    const { imageSetIndex } = this.state;
+    const newImageSetIndex = imageSetIndex + 1;
+
     const startIndex = this.calculateNextStartIndex();
-    this.setState({ startIndex });
+    this.setState({
+      imageSetIndex: newImageSetIndex,
+      startIndex,
+    });
   }
 
   previousButtonHandler = () => {
-    const { rowLimit, startIndex } = this.state;
-    const basicPreviousStartIndex = startIndex - rowLimit;
+    const { imageSetIndex, rowLimit, startIndex } = this.state;
+    const newImageSetIndex = imageSetIndex - 1;
 
+    const basicPreviousStartIndex = startIndex - rowLimit;
     const sanitizedPreviousStartIndex = Math.max(basicPreviousStartIndex, 0);
-    this.setState({ startIndex: sanitizedPreviousStartIndex });
+
+    this.setState({
+      imageSetIndex: newImageSetIndex,
+      startIndex: sanitizedPreviousStartIndex,
+    });
   }
 
   setRowLimit = ({ target: { value } }) => {
     const rowLimit = parseInt(value);
-    this.setState({ rowLimit });
+    this.setState({ rowLimit, startIndex: 0 });
   };
 
   toggleEditMode = () => {
@@ -63,14 +76,22 @@ class Carousel extends Component {
 
     const ordinaryNextIndex = rowLimit + startIndex;
     const isFinalRow = (ordinaryNextIndex + rowLimit) > images.length;
-    const emptySlotCount = images.length - ordinaryNextIndex;
 
-    const shouldShiftIndex = isFinalRow
-      && emptySlotCount > 0;
-
-    return shouldShiftIndex
-      ? ordinaryNextIndex - emptySlotCount
+    return isFinalRow
+      ? images.length - rowLimit
       : ordinaryNextIndex;
+  }
+
+  calculateImageSetCount = () => {
+    const { rowLimit } = this.state;
+    const { images } = this.props;
+
+    const fullRowCount = Math.floor(images.length / rowLimit);
+    const hasPartialRow = (images.length % rowLimit) > 0;
+
+    return hasPartialRow
+      ? fullRowCount + 1
+      : fullRowCount;
   }
 
   render() {
@@ -81,6 +102,7 @@ class Carousel extends Component {
       removeFromCarousel,
     } = this.props;
     const {
+      imageSetIndex,
       isEditMode,
       rowLimit,
       selectedImages,
@@ -105,6 +127,8 @@ class Carousel extends Component {
       ? viewModeLabel
       : editModeLabel;
 
+    const dots = times(this.calculateImageSetCount(), constant('•'));
+
     return (
       <div data-testid="carousel">
         <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%'}}>
@@ -120,6 +144,17 @@ class Carousel extends Component {
               selectImage={this.selectImage}
             />
           ))}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'center' }} >
+          <div>
+            {dots.map((dot, index) => (
+              <span
+                className={index === imageSetIndex ? 'selectedNavDot' : 'unselectedNavDot'}
+                data-testid="carousel-image-set-dot"
+              >
+                {dot}
+              </span>))}
+          </div>
         </div>
         {!!images.length && (
           <div>

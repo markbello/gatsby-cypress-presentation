@@ -20,7 +20,7 @@ describe('Carousel component', () => {
 
     expect(component.find(CarouselImage).length).toEqual(2);
   });
-  it('decrements the start index by rowLimit on "previous" button click', () => {
+  it('decrements the startIndex by rowLimit on "previous" button click', () => {
     const component = shallow(<Carousel {...props} />);
     const previousButton = component.find('[data-testid="button-previous"]');
 
@@ -32,6 +32,20 @@ describe('Carousel component', () => {
     previousButton.simulate('click');
 
     expect(component.state().startIndex).toEqual(2);
+  });
+  it('decrements the imageSetIndex on "previous" button click', () => {
+    const component = shallow(<Carousel {...props} />);
+    const previousButton = component.find('[data-testid="button-previous"]');
+
+    component.setState({
+      imageSetIndex: 2,
+      rowLimit: 2,
+      startIndex: 4,
+    });
+
+    previousButton.simulate('click');
+
+    expect(component.state().imageSetIndex).toEqual(1);
   });
   it('decrements the start index down to a minimum of 0', () => {
     const component = shallow(<Carousel {...props} />);
@@ -46,7 +60,7 @@ describe('Carousel component', () => {
 
     expect(component.state().startIndex).toEqual(0);
   });
-  it('increments the start index by rowLimit on "next" button click', () => {
+  it('increments the startIndex by rowLimit on "next" button click', () => {
     const component = shallow(<Carousel {...props} />);
     const nextButton = component.find('[data-testid="button-next"]');
     const { rowLimit, startIndex } = component.state();
@@ -55,6 +69,15 @@ describe('Carousel component', () => {
 
     expect(component.state().startIndex).toEqual(startIndex + rowLimit);
   });
+  it('increments the imageSetIndex on "next" button click', () => {
+    const component = shallow(<Carousel {...props} />);
+    const nextButton = component.find('[data-testid="button-next"]');
+    const { rowLimit, startIndex } = component.state();
+
+    nextButton.simulate('click');
+
+    expect(component.state().imageSetIndex).toEqual(1);
+  });
   it('changes rowLimit in state through dropdown', () => {
     const component = shallow(<Carousel {...props} />);
     const { setRowLimit } = component.instance();
@@ -62,6 +85,15 @@ describe('Carousel component', () => {
     setRowLimit({ target: { value: 5 } });
 
     expect(component.state().rowLimit).toEqual(5)
+  });
+  it('resets the Carousel startIndex when changing rowLimit', () => {
+    const component = shallow(<Carousel {...props} />);
+    const { setRowLimit } = component.instance();
+    component.setState({ startIndex: 4 });
+
+    setRowLimit({ target: { value: 5 } });
+
+    expect(component.state().startIndex).toEqual(0);
   });
   it('toggleEditMode sets isEditMode on state', () => {
     const component = shallow(<Carousel {...props} />);
@@ -164,17 +196,28 @@ describe('Carousel component', () => {
   it('calculateNextStartIndex shifts to include previous images to fill empty row slots', () => {
     const fiveImageProps = {
       ...props,
-      images: testImages.slice(0,5),
+      images: testImages.slice(0,4),
     }
-    const component = shallow(<Carousel {...fiveImageProps} />);
 
+    const component = shallow(<Carousel {...fiveImageProps} />);
+    const { calculateNextStartIndex } = component.instance();
     component.setState({
       rowLimit: 3,
       startIndex: 0,
     });
 
-    const { calculateNextStartIndex } = component.instance();
+    expect(calculateNextStartIndex()).toEqual(1);
+  });
+  it('calculateImageSetCount returns how many sets the user can tab through', () => {
+    const fiveImageProps = {
+      ...props,
+      images: testImages.slice(0,4),
+    }
 
-    expect(calculateNextStartIndex(fiveImageProps.images)).toEqual(1);
+    const component = shallow(<Carousel {...fiveImageProps} />);
+    const { calculateImageSetCount } = component.instance();
+    component.setState({ rowLimit: 3});
+
+    expect(calculateImageSetCount()).toEqual(2);
   });
 });

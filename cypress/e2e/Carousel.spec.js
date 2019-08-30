@@ -108,6 +108,23 @@ describe('Carousel', () => {
       .get('[data-testid=carousel-image]')
       .should('have.length', 3);
   });
+  it('restarts the Carousel at the beginning when changing rowLimit', () => {
+    cy.get('[data-testid=thumbnail]')
+      .first()
+      .click()
+      .next()
+      .click()
+      .get('[data-testid=addButton]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .should('have.length', 2)
+      .get('[data-testid=button-next]')
+      .click()
+      .get('[data-testid=dropdown-rowlimit]')
+      .select('3')
+      .get('[data-testid=carousel-image]')
+      .should('have.length', 3);
+  });
   it('toggles into edit mode when the view-mode button is clicked', () => {
     cy.get('[data-testid=button-view-mode]')
       .click()
@@ -187,5 +204,66 @@ describe('Carousel', () => {
       .should('have.length', 1)
       .get('[data-testid=thumbnail]')
       .should('have.length', carouselImages.length - 1);
+  });
+  it('shows one image-set-dot "•" when there is only one set to show', () => {
+    cy.get('[data-testid=carousel-image]')
+      .should('have.length', 1)
+      .get('[data-testid=carousel-image-set-dot]')
+      .should('have.length', 1);
+  });
+  it('shows more than one image-set-dot "•" when there are multiple imageSets to show', () => {
+    cy.get('[data-testid=thumbnail]')
+      .first()
+      .click()
+      .next()
+      .click()
+      .get('[data-testid=addButton]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .should('have.length', 2)
+      .get('[data-testid=carousel-image-set-dot]')
+      .should('have.length', 2);
+  });
+  it('applies the selectedNavDot class to the imageSet in focus', () => {
+    cy.get('[data-testid=carousel-image]')
+      .should('have.length', 1)
+      .get('[data-testid=carousel-image-set-dot]')
+      .first()
+      .should('have.class', 'selectedNavDot');
+  });
+  it('applies the unselectedNavDot class to the imageSet not in focus', () => {
+    cy.get('[data-testid=thumbnail]')
+      .first()
+      .click()
+      .next()
+      .click()
+      .get('[data-testid=addButton]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .should('have.length', 2)
+      .get('[data-testid=carousel-image-set-dot]')
+      .next()
+      .should('have.class', 'unselectedNavDot');
+  });
+  it('changes the selectedNavDot class when moving between imageSets', () => {
+    cy.get('[data-testid=thumbnail]')
+      .first()
+      .click()
+      .next()
+      .click()
+      .get('[data-testid=addButton]')
+      .click()
+      .get('[data-testid=carousel-image]')
+      .should('have.length', 2)
+      .get('[data-testid=carousel-image-set-dot]')
+      .next()
+      .should('have.class', 'unselectedNavDot')
+      .get('[data-testid=button-next]')
+      .click()
+      .get('[data-testid=carousel-image-set-dot]')
+      .first()
+      .should('have.class', 'unselectedNavDot')
+      .next()
+      .should('have.class', 'selectedNavDot');
   });
 });
