@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import ReactHoverObserver from 'react-hover-observer';
 import './carouselImage.css';
 
 const CarouselImage = ({
@@ -7,17 +8,12 @@ const CarouselImage = ({
   deselectImage,
   image,
   isEditMode,
+  isHovering,
   isSelected,
   rowLimit,
   selectImage,
 }) => {
   const { imageCaption, imageName, src } = image;
-
-  const [isCaptionVisible, setIsCaptionVisible] = useState(false);
-  const toggleCaption = () => setIsCaptionVisible(!isCaptionVisible);
-
-  const shouldShowCaption = !isEditMode
-    && isCaptionVisible;
 
   const imageClickHandler = ({ target: { value } }) => {
     if (isEditMode) {
@@ -34,20 +30,24 @@ const CarouselImage = ({
       data-testid="carousel-image"
       className={`imageContainer ${isSelected && "selected"}`}
       onClick={imageClickHandler}
-      onMouseEnter={toggleCaption}
-      onMouseLeave={toggleCaption}
       style={{ width: `calc(${100 / rowLimit}% - 10px)`, margin: '5px' }}
-    >
-      <img
-        alt={imageCaption}
-        className="animation-target carouselImage"
-        src={src}
-      />
-      {shouldShowCaption && (
-        <div data-testid="carousel-image-caption" className="imageCaption">
-          {imageCaption}
-        </div>
-      )}
+      >
+      <ReactHoverObserver>
+        {({ isHovering }) => (
+          <div>
+            <img
+              alt={imageCaption}
+              className="animation-target carouselImage"
+              src={src}
+              />
+            {isHovering && (
+              <div data-testid="carousel-image-caption" className="imageCaption">
+                {imageCaption}
+              </div>
+            )}
+          </div>
+        )}
+      </ReactHoverObserver>
     </div>
   );
 };
