@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { constant, pull, times } from 'lodash';
+import { CSSTransitionGroup } from 'react-transition-group';
 import lang from '../core/langPack.json';
 import './carousel.css';
 import CarouselImage from './CarouselImage';
@@ -142,7 +143,7 @@ class Carousel extends Component {
               key={image.imageName}
               rowLimit={rowLimit}
               selectImage={this.selectImage}
-            />
+              />
           ))}
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'center' }} >

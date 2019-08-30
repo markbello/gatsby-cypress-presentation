@@ -37,7 +37,7 @@ const CarouselImage = ({
       onMouseEnter={toggleCaption}
       onMouseLeave={toggleCaption}
     >
-      <img src={src} alt={imageCaption} style={{ borderRadius: '15px' }}/>
+      <img className="animation-target" src={src} alt={imageCaption} style={{ borderRadius: '15px' }}/>
       {shouldShowCaption && (
         <div data-testid="carousel-image-caption" className="imageCaption">
           {imageCaption}

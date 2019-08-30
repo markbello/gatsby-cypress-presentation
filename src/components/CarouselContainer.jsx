@@ -32,6 +32,11 @@ export default class CarouselContainer extends Component {
   render() {
     return (
       <div>
+        <ImageSelector
+          addToCarousel={this.addToCarousel}
+          allImages={this.props.allImages}
+          carouselImages={this.state.carouselImages}
+        />
         <Carousel
           activateImage={this.activateImage}
           deactivateImage={this.deactivateImage}
@@ -40,11 +45,6 @@ export default class CarouselContainer extends Component {
           rowLimit={this.state.rowLimit}
         />
       {this.state.activeImage && <ImageViewer image={this.state.activeImage} />}
-        <ImageSelector
-          addToCarousel={this.addToCarousel}
-          allImages={this.props.allImages}
-          carouselImages={this.state.carouselImages}
-        />
       </div>
     );
   };

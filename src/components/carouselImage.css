@@ -8,6 +8,8 @@
   color: white;
   top: 90%;
   width: 100%;
+  background: rgba(0,0,0,.5);
+  height: 1.5rem;
 }
 
 .selected img {

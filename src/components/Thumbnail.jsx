@@ -12,7 +12,7 @@ const Thumbnail = ({
     <div
       className={`${ isSelected ? 'selected' : null }`}
       data-testid="thumbnail"
-      style={{ width: '100px', margin: '10px' }}
+      style={{ width: '100px', margin: '5px' }}
       onClick={clickHandler}>
       <img
         alt={imageCaption}

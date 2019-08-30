@@ -1,8 +1,8 @@
 module.exports = {
   siteMetadata: {
-    title: 'Carousel Component Editor Challenge',
-    description: 'Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.',
-    author: '@gatsbyjs',
+    title: 'Mark Bello - Carousel Component Editor Challenge',
+    description: '',
+    author: '@markbello',
   },
   plugins: [
     'gatsby-plugin-react-helmet',
