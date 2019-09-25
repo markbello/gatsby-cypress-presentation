@@ -1,84 +1,40 @@
 {
   "carouselImages": [
     {
-      "imageName": "letterBoardIc.jpg",
-      "imageCaption": "Letter Board"
+      "imageName": "limbo-champ.jpg",
+      "imageCaption": "Limbo Champ: more of a doggo, imported from Corgonia"
     },
     {
-      "imageName": "listen-hat.jpg",
-      "imageCaption": "Hat"
+      "imageName": "ol-elephant-ears.jpg",
+      "imageCaption": "Ol' Elephant Ears: pupper, never forgets a treat"
     },
     {
-      "imageName": "listen-v02.jpg",
-      "imageCaption": "Girl"
+      "imageName": "sentient-mop.jpg",
+      "imageCaption": "Sentient Mop: pupper, goes \"whoosh\""
     },
     {
-      "imageName": "listeningBell.jpg",
-      "imageCaption": "Bell"
+      "imageName": "sheila-from-accounting.jpg",
+      "imageCaption": "Sheila from Accounting: pupperino, wants to talk to a manager"
     },
     {
-      "imageName": "listeningCap.jpg",
-      "imageCaption": "Cap"
+      "imageName": "sir-snoots-a-lot.jpg",
+      "imageCaption": "Sir Snoots-a-Lot: smol doggo, major bug-eyes, medium bork-drive"
     },
     {
-      "imageName": "listeningCup.jpg",
-      "imageCaption": "Cup"
+      "imageName": "some-kind-of-weird-cow-or-something.jpg",
+      "imageCaption": "Some Kind of Weird Cow or Something: smol doggo, minor bug-eyes, medium bork-drive"
     },
     {
-      "imageName": "listeningDoll.jpg",
-      "imageCaption": "Doll"
+      "imageName": "waggy-lads.jpg",
+      "imageCaption": " waggy Lads: pupperino, those boots tho"
     },
     {
-      "imageName": "matchingAbc.jpg",
-      "imageCaption": "ABCs"
+      "imageName": "stubborn-jeff.jpg",
+      "imageCaption": "Stubborn Jeff: trash panda, risky house pet"
     },
     {
-      "imageName": "matchingBears.jpg",
-      "imageCaption": "Bears"
-    },
-    {
-      "imageName": "matchingBirds.jpg",
-      "imageCaption": "Birds"
-    },
-    {
-      "imageName": "matchingFriends.jpg",
-      "imageCaption": "Friends"
-    },
-    {
-      "imageName": "matchingZoo.jpg",
-      "imageCaption": "Zoo"
-    },
-    {
-      "imageName": "orderItCake.jpg",
-      "imageCaption": "Cake"
-    },
-    {
-      "imageName": "orderItToyN.jpg",
-      "imageCaption": "Toy"
-    },
-    {
-      "imageName": "paintPotBlue.jpg",
-      "imageCaption": "Blue Paint"
-    },
-    {
-      "imageName": "paintPotRed.jpg",
-      "imageCaption": " Red Paint"
-    },
-    {
-      "imageName": "petIc.jpg",
-      "imageCaption": "Pet"
-    },
-    {
-      "imageName": "princessIc.jpg",
-      "imageCaption": "Princess"
-    },
-    {
-      "imageName": "robotIc.jpg",
-      "imageCaption": "Robot"
-    },
-    {
-      "imageName": "spaceIc.jpg",
-      "imageCaption": "Space"
+      "imageName": "yappers-delight.jpg",
+      "imageCaption": "Yapper's Delight: pupperino, major bug-eyes, maximum bork-drive"
     }
   ]
 }

@@ -3,10 +3,7 @@ import { useStaticQuery, graphql } from 'gatsby';
 import { sortImagesByCaption } from '../core/utils';
 import { carouselImages } from '../images/carouselImages.json';
 import Layout from '../components/Layout';
-import Carousel from '../components/Carousel';
 import CarouselContainer from '../components/CarouselContainer';
-import ImageSelector from '../components/ImageSelector';
-import ImageViewer from '../components/ImageViewer';
 
 const IndexPage = () => {
   const { allFile: { edges }} = useStaticQuery(graphql`
@@ -23,7 +20,7 @@ const IndexPage = () => {
   `);
   const imageNodes = edges.map(({ node }) => node );
 
-  const imagesWithSrc = carouselImages.map((image, idx) => {
+  const imagesWithSrc = carouselImages.map((image) => {
     const imageNode = imageNodes.find(node => node.base === image.imageName);
     const src = imageNode.publicURL;
 

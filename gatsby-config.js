@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Mark Bello - Carousel Component Editor Challenge',
+    title: 'Mark Bello - Gatsby Cypress Presentation',
     description: '',
     author: '@markbello',
   },

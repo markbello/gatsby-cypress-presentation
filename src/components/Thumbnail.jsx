@@ -18,7 +18,6 @@ const Thumbnail = ({
         src={src}
         width="100px"
       />
-      <p>{imageCaption}</p>
     </div>
   );
 };
